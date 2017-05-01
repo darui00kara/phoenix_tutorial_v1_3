@@ -1,0 +1,6 @@
+<h2>Edit Micropost</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: micropost_path(@conn, :update, @micropost) %>
+
+<span><%= link "Back", to: micropost_path(@conn, :index) %></span>

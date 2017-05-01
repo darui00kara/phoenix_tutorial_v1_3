@@ -1,0 +1,26 @@
+<h2>Listing Microposts</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Content</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for micropost <- @microposts do %>
+    <tr>
+      <td><%= micropost.content %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: micropost_path(@conn, :show, micropost), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: micropost_path(@conn, :edit, micropost), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: micropost_path(@conn, :delete, micropost), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Micropost", to: micropost_path(@conn, :new) %></span>
