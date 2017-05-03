@@ -24,6 +24,10 @@ defmodule ToyApp.Web.Router do
     get "/help",    StaticPageController, :help
     get "/about",   StaticPageController, :about
     get "/contact", StaticPageController, :contact
+
+    # User
+    resources "/users", UserController, except: [:new]
+    get "/signup", UserController, :new
   end
 
   # Other scopes may use custom stacks.
