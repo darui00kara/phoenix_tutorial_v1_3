@@ -9,27 +9,30 @@
 
     <title>Hello ToyApp!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+
+    <%= render "shim.html" %>
   </head>
 
   <body>
+    <!-- Header -->
+    <%= render "header.html", conn: @conn %>
+
     <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-          </ul>
-        </nav>
-        <span class="logo"></span>
-      </header>
+      <!-- Error & Warn Message -->
+      <h2>
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      </h2>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-
+      <!-- Main Template -->
       <main role="main">
         <%= render @view_module, @view_template, assigns %>
       </main>
 
+      <!-- Footer -->
+      <%= render "footer.html", conn: @conn %>
     </div> <!-- /container -->
+
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

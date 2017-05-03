@@ -16,7 +16,14 @@ defmodule ToyApp.Web.Router do
   scope "/", ToyApp.Web do
     pipe_through :browser # Use the default browser stack
 
+    # Default
     get "/", PageController, :index
+
+    # StaticPage
+    get "/home",    StaticPageController, :home
+    get "/help",    StaticPageController, :help
+    get "/about",   StaticPageController, :about
+    get "/contact", StaticPageController, :contact
   end
 
   # Other scopes may use custom stacks.
