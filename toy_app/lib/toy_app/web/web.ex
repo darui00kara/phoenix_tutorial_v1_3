@@ -22,6 +22,8 @@ defmodule ToyApp.Web do
       import Plug.Conn
       import ToyApp.Web.Router.Helpers
       import ToyApp.Web.Gettext
+
+      plug ToyApp.Plugs.CheckAuthentication
     end
   end
 
@@ -40,6 +42,8 @@ defmodule ToyApp.Web do
       import ToyApp.Web.Router.Helpers
       import ToyApp.Web.ErrorHelpers
       import ToyApp.Web.Gettext
+
+      import ToyApp.Helpers.ViewHelper
     end
   end
 

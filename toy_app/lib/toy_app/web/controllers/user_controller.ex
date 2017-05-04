@@ -18,6 +18,7 @@ defmodule ToyApp.Web.UserController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User created successfully.")
+        |> put_session(:user_id, user.id)
         |> redirect(to: user_path(conn, :show, user))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

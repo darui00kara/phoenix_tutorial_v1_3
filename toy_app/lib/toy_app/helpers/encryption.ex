@@ -1,4 +1,4 @@
-defmodule SampleApp.Helpers.Encryption do
+defmodule ToyApp.Helpers.Encryption do
   import Comeonin.Bcrypt
 
   def encrypt(password) do

@@ -28,6 +28,11 @@ defmodule ToyApp.Web.Router do
     # User
     resources "/users", UserController, except: [:new]
     get "/signup", UserController, :new
+
+    # Session
+    get "/signin", SessionController, :new
+    post "/session", SessionController, :create
+    delete "/signout", SessionController, :delete
   end
 
   # Other scopes may use custom stacks.

@@ -7,7 +7,8 @@ defmodule ToyApp.Accounts do
   alias ToyApp.Repo
 
   alias ToyApp.Accounts.User
-  alias SampleApp.Helpers.Encryption
+  alias ToyApp.Helpers.Encryption
+  alias ToyApp.Helpers.Signin
 
   @doc """
   Returns the list of users.
@@ -124,5 +125,9 @@ defmodule ToyApp.Accounts do
         _ ->
         changeset |> put_change(:password_digest, password |> Encryption.encrypt)
     end
+  end
+
+  def user_signin(email, password) do
+    Repo.get_by(User, email: email) |> Signin.check(password)
   end
 end
