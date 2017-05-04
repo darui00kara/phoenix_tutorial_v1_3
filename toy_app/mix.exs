@@ -17,7 +17,12 @@ defmodule ToyApp.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {ToyApp.Application, []},
-     extra_applications: [:logger, :runtime_tools, :comeonin]]
+     extra_applications: [:logger,
+                          :runtime_tools,
+                          :comeonin,
+                          :scrivener,
+                          :scrivener_ecto,
+                          :scrivener_html]]
   end
 
   # Specifies which paths to compile per environment.
@@ -36,7 +41,10 @@ defmodule ToyApp.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
-     {:comeonin, "~> 3.0"}]
+     {:comeonin, "~> 3.0"},
+     {:scrivener, "~> 2.3.0"},
+     {:scrivener_ecto, "~> 1.2.1"},
+     {:scrivener_html, "~> 1.7.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

@@ -1,28 +1,15 @@
-<h2>Listing Users</h2>
+<h1>All users</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
+<%= if !is_empty_list?(@users.entries) do %>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for user <- @users do %>
-    <tr>
-      <td><%= user.name %></td>
-      <td><%= user.email %></td>
+  <%= render ToyApp.Web.PaginationView, "page_link.html", conn: @conn, pages: @users %>
 
-      <td class="text-right">
-        <span><%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
+  <ul class="users">
+    <%= for user <- @users.entries do %>
+      <%= render "user.html", conn: @conn, user: user %>
+    <% end %>
+  </ul>
+
+  <%= render ToyApp.Web.PaginationView, "page_link.html", conn: @conn, pages: @users %>
+
 <% end %>
-  </tbody>
-</table>
-
-<span><%= link "New User", to: user_path(@conn, :new) %></span>

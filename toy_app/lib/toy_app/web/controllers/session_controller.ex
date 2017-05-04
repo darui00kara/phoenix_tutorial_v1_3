@@ -13,7 +13,7 @@ defmodule ToyApp.Web.SessionController do
         conn
         |> put_flash(:info, "User signin is success!")
         |> put_session(:user_id, user.id)
-        |> redirect(to: static_page_path(conn, :home))
+        |> redirect(to: user_path(conn, :show, user))
       :error ->
         conn
         |> put_flash(:error, "User signin is failed! email or password is incorrect.")

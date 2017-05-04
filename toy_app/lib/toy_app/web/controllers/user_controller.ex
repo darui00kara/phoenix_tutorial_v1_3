@@ -1,11 +1,21 @@
 defmodule ToyApp.Web.UserController do
   use ToyApp.Web, :controller
 
+  plug ToyApp.Plugs.SignedInUser when action in [:show, :edit, :update, :index, :delete]
+  plug :correct_user? when action in [:edit, :update, :delete]
+
   alias ToyApp.Accounts
 
-  def index(conn, _params) do
-    users = Accounts.list_users()
-    render(conn, "index.html", users: users)
+  def index(conn, params) do
+    users = Accounts.pagenate_list_users(params)
+
+    if users do
+      render(conn, "index.html", users: users)
+    else
+      conn
+      |> put_flash(:error, "Invalid page number!!")
+      |> render("index.html", users: [])
+    end
   end
 
   def new(conn, _params) do
@@ -55,6 +65,24 @@ defmodule ToyApp.Web.UserController do
 
     conn
     |> put_flash(:info, "User deleted successfully.")
-    |> redirect(to: user_path(conn, :index))
+    |> delete_session(:user_id)
+    |> redirect(to: static_page_path(conn, :home))
+  end
+
+  defp correct_user?(conn, _) do
+    user = conn.params["id"] |> String.to_integer |> Accounts.get_user!
+
+    if current_user?(conn, user) do
+      conn
+    else
+      conn
+      |> put_flash(:info, "Please signin.")
+      |> redirect(to: session_path(conn, :new))
+      |> halt
+    end
+  end
+
+  defp current_user?(conn, user) do
+    conn.assigns[:current_user] == user
   end
 end

@@ -130,4 +130,9 @@ defmodule ToyApp.Accounts do
   def user_signin(email, password) do
     Repo.get_by(User, email: email) |> Signin.check(password)
   end
+
+  def pagenate_list_users(params) do
+    from(u in User, order_by: [asc: :name])
+    |> Repo.paginate(params)
+  end
 end
