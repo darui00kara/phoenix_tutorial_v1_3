@@ -31,6 +31,9 @@
 
       <!-- Footer -->
       <%= render "footer.html", conn: @conn %>
+
+      <!-- Debug -->
+      <%= render "debug.html", conn: @conn %>
     </div> <!-- /container -->
 
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
