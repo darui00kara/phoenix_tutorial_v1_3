@@ -6,7 +6,7 @@ defmodule ToyApp.Accounts do
   import Ecto.{Query, Changeset}, warn: false
   alias ToyApp.Repo
 
-  alias ToyApp.Accounts.User
+  alias ToyApp.Accounts.{User, Micropost}
   alias ToyApp.Helpers.Encryption
   alias ToyApp.Helpers.Signin
 
@@ -133,6 +133,47 @@ defmodule ToyApp.Accounts do
 
   def pagenate_list_users(params) do
     from(u in User, order_by: [asc: :name])
+    |> Repo.paginate(params)
+  end
+
+  def change_micropost(%Micropost{} = micropost) do
+    micropost_changeset(micropost, %{})
+  end
+
+  defp micropost_changeset(%Micropost{} = micropost, attrs) do
+    micropost
+    |> cast(attrs, [:content, :user_id])
+    |> validate_required([:content, :user_id])
+    |> validate_length(:content, min: 1)
+    |> validate_length(:content, max: 140)
+  end
+
+  defp build_micropost(user, content) do
+    Ecto.build_assoc(user, :microposts, content: content)
+  end
+
+  def create_micropost(user, content) do
+    build_micropost(user, content)
+    |> change_micropost
+    |> Repo.insert
+  end
+
+  def delete_micropost(%Micropost{} = micropost) do
+    Repo.delete(micropost)
+  end
+
+  def get_micropost!(id) do
+    Repo.get! Micropost, id
+  end
+
+  ## def assoc_post(user) do
+  ##   Ecto.assoc(user, :microposts) |> Repo.all
+  ## end
+
+  def paginate_assoc_posts(user, params) do
+    from(m in Micropost,
+      where: m.user_id == ^user.id,
+        order_by: [desc: :inserted_at])
     |> Repo.paginate(params)
   end
 end

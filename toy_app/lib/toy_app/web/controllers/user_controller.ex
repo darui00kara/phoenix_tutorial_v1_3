@@ -35,9 +35,17 @@ defmodule ToyApp.Web.UserController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id} = params) do
     user = Accounts.get_user!(id)
-    render(conn, "show.html", user: user)
+    posts = Accounts.paginate_assoc_posts(user, params)
+
+    if posts do
+      render(conn, "show.html", user: user, posts: posts)
+    else
+      conn
+      |> put_flash(:error, "Invalid page number!!")
+      |> render("show.html", user: user, posts: [])
+    end
   end
 
   def edit(conn, %{"id" => id}) do

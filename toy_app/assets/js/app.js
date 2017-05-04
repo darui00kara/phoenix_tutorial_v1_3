@@ -19,3 +19,7 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+// Bootstrap 3.3.7 bug counter-measure
+// reference link: http://stackoverflow.com/questions/39929491/phoenix-link-method-delete-doesnt-work-in-bootstrap-dropdown
+$(document).off('click.bs.dropdown.data-api', '.dropdown form');

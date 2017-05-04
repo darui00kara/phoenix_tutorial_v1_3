@@ -33,6 +33,9 @@ defmodule ToyApp.Web.Router do
     get "/signin", SessionController, :new
     post "/session", SessionController, :create
     delete "/signout", SessionController, :delete
+
+    # Micropost
+    resources "/posts", MicropostController, only: [:create, :delete]
   end
 
   # Other scopes may use custom stacks.

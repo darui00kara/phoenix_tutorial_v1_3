@@ -6,6 +6,7 @@ defmodule ToyApp.Accounts.User do
     field :name, :string
     field :password, :string, virtual: true
     field :password_digest, :string
+    has_many :microposts, ToyApp.Accounts.Micropost
 
     timestamps()
   end

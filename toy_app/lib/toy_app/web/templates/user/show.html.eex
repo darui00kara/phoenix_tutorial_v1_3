@@ -1,21 +1,44 @@
-<h2>Show User</h2>
-
 <div class="row">
   <aside class="col-md-4">
+
     <section>
       <h1>
         <img src="<%= gravatar_for(@user) %>" class="gravatar">
         <%= @user.name %>
       </h1>
     </section>
-    <section>
-      <%= link "Edit", to: user_path(@conn, :edit, @user), class: "btn btn-default btn-xs" %>
-      <%= button "Delete", to: user_path(@conn, :delete, @user),
-                           method: :delete,
-                           onclick: "return confirm(\"Are you sure?\");",
-                           class: "btn btn-danger btn-xs" %>
-    </section>
-  </aside>
-</div>
 
-<span><%= link "Back", to: user_path(@conn, :index) %></span>
+    <%= if current_user?(@conn, @user) do %>
+      <section>
+        <%= link "Edit", to: user_path(@conn, :edit, @user),
+                         class: "btn btn-default btn-xs" %>
+        <%= button "Delete", to: user_path(@conn, :delete, @user),
+                             method: :delete,
+                             onclick: "return confirm(\"Are you sure?\");",
+                             class: "btn btn-danger btn-xs" %>
+      </section>
+    <% end %>
+
+    <section>
+      <%= render ToyApp.Web.MicropostView, "form.html",
+                                           conn: @conn,
+                                           user: @user %>
+    </section>
+
+  </aside>
+
+  <div class="col-md-8">
+    <%= unless is_empty_list?(@posts.entries) do %>
+      <h3>Microposts</h3>
+
+      <%= render ToyApp.Web.SharedView, "microposts.html",
+                                       conn: @conn,
+                                       posts: @posts,
+                                       user: @user %>
+      
+      <%= Scrivener.HTML.pagination_links @conn, @posts, [@user],
+                                          path: &user_path/4,
+                                          action: :show %>
+    <% end %>
+  </div>
+</div>
