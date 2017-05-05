@@ -36,8 +36,9 @@ defmodule ToyApp.Web.UserController do
   end
 
   def show(conn, %{"id" => id} = params) do
-    user = Accounts.get_user!(id)
-    posts = Accounts.paginate_assoc_posts(user, params)
+    user  = Accounts.get_user_with_relationships(id)
+    posts = extract_follow_ids(user.followed_users, :followed_id)
+            |> Accounts.get_relationship_posts_with_paginate(user, params)
 
     if posts do
       render(conn, "show.html", user: user, posts: posts)
@@ -77,6 +78,35 @@ defmodule ToyApp.Web.UserController do
     |> redirect(to: static_page_path(conn, :home))
   end
 
+  
+  def following(conn, %{"id" => id} = params) do
+    user  = Accounts.get_user_with_relationships(id)
+    users = extract_follow_ids(user.followed_users, :followed_id)
+            |> Accounts.get_relationship_users(params)
+
+    if users do
+      render(conn, "following.html", user: user, users: users)
+    else
+      conn
+      |> put_flash(:error, "Invalid page number!!")
+      |> render("following.html", user: user, users: [])
+    end
+  end
+
+  def followers(conn, %{"id" => id} = params) do
+    user  = Accounts.get_user_with_relationships(id)
+    users = extract_follow_ids(user.followers, :follower_id)
+            |> Accounts.get_relationship_users(params)
+
+    if users do
+      render(conn, "followers.html", user: user, users: users)
+    else
+      conn
+      |> put_flash(:error, "Invalid page number!!")
+      |> render("followers.html", user: user, users: [])
+    end
+  end
+
   defp correct_user?(conn, _) do
     user = conn.params["id"] |> String.to_integer |> Accounts.get_user!
 
@@ -92,5 +122,14 @@ defmodule ToyApp.Web.UserController do
 
   defp current_user?(conn, user) do
     conn.assigns[:current_user] == user
+  end
+
+  defp extract_follow_ids(follow_users, key) do
+    Enum.reduce(follow_users, [], fn(follow_user, acc) ->
+      case Map.get(follow_user, key) do
+        nil -> acc
+         id -> [id | acc]
+      end
+    end) |> Enum.reverse
   end
 end

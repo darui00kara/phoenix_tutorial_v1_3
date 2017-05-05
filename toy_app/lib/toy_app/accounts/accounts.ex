@@ -37,7 +37,9 @@ defmodule ToyApp.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    Repo.get!(User, id)
+  end
 
   @doc """
   Creates a user.
@@ -136,6 +138,20 @@ defmodule ToyApp.Accounts do
     |> Repo.paginate(params)
   end
 
+  def get_user_with_relationships(id) do
+    Repo.get!(User, id)
+    |> Repo.preload(:relationships)
+    |> Repo.preload(:reverse_relationships)
+  end
+
+  def get_relationship_users(list_ids, params) do
+    from(u in User,
+       where: u.id in ^list_ids,
+       order_by: [asc: :name])
+    |> Repo.paginate(params)
+  end
+
+  # Micropost
   def change_micropost(%Micropost{} = micropost) do
     micropost_changeset(micropost, %{})
   end
@@ -166,14 +182,17 @@ defmodule ToyApp.Accounts do
     Repo.get! Micropost, id
   end
 
-  ## def assoc_post(user) do
-  ##   Ecto.assoc(user, :microposts) |> Repo.all
-  ## end
-
   def paginate_assoc_posts(user, params) do
     from(m in Micropost,
       where: m.user_id == ^user.id,
-        order_by: [desc: :inserted_at])
+      order_by: [desc: :inserted_at])
+    |> Repo.paginate(params)
+  end
+
+  def get_relationship_posts_with_paginate(list_ids, user, params) do
+    from(m in Micropost,
+      where: m.user_id == ^user.id or m.user_id in ^list_ids,
+      order_by: [desc: :inserted_at])
     |> Repo.paginate(params)
   end
 end
