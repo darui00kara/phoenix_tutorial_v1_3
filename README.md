@@ -68,10 +68,10 @@ Github: [darui00kara/phoenix_tutorial_v1_3 (master)](https://github.com/darui00k
 - Erlang: Eshell V8.1, OTP-Version 19
 - Elixir: v1.4.2
   * Phoenix Framework: v1.3.0-rc.0
-  * Comeonin: v2.5.0
-  * Scrivener: v2.1.1
-  * Scrivener_html: v1.3.3
-  * Scrivener_ecto: v1.0.3
+  * Comeonin: v3.0.0
+  * Scrivener: v2.3.0
+  * Scrivener_html: v1.7.0
+  * Scrivener_ecto: v1.2.1
 - Node.js: v7.7.3
 - PostgreSQL: postgres (PostgreSQL) 9.6.1
 
